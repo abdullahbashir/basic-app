@@ -29,10 +29,15 @@ function App() {
     setUserResponse(data);
   };
 
+  console.log(process.env.REACT_APP_SECRET);
+  console.log(process.env.REACT_APP_API_URL);
+
   return (
     <div style={{ textAlign: "center", marginTop: "40px" }}>
       <h1>React + Express Test</h1>
       <p>GET Response from Express: {message}</p>
+
+
 
       <button onClick={sendUser}>Send POST to Express</button>
 
