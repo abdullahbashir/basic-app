@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
 
 function App() {
+  const [message, setMessage] = useState("");
+  const [userResponse, setUserResponse] = useState(null);
+
+  // Fetch GET route
+  useEffect(() => {
+    fetch("http://localhost:5000/")
+      .then((res) => res.text())
+      .then((data) => {
+        console.log(data);
+        setMessage(data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  // // Send POST request
+  const sendUser = async () => {
+    const response = await fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: "Abdullah", age: 25 }),
+    });
+
+    const data = await response.json();
+    setUserResponse(data);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ textAlign: "center", marginTop: "40px" }}>
+      <h1>React + Express Test</h1>
+      <p>GET Response from Express: {message}</p>
+
+      <button onClick={sendUser}>Send POST to Express</button>
+
+      {userResponse && (
+        <pre style={{ textAlign: "left", width: "300px", margin: "20px auto" }}>
+          {JSON.stringify(userResponse, null, 2)}
+        </pre>
+      )}
     </div>
   );
 }
